@@ -11,7 +11,7 @@
 #import "TSBlurView.h"
 #import "TSMessage.h"
 
-#define TSMessageViewMinimumPadding 15.0
+#define TSMessageViewMinimumPadding 8.0
 
 #define TSDesignFileName @"TSMessagesDefaultDesign"
 
@@ -266,6 +266,7 @@ canBeDismissedByUser:(BOOL)dismissingEnabled
         else
         {
             // On iOS 7 and above use a blur layer instead (not yet finished)
+            
             _backgroundBlurView = [[TSBlurView alloc] init];
             self.backgroundBlurView.autoresizingMask = (UIViewAutoresizingFlexibleWidth);
             self.backgroundBlurView.blurTintColor = [UIColor colorWithHexString:current[@"backgroundColor"]];
@@ -296,8 +297,9 @@ canBeDismissedByUser:(BOOL)dismissingEnabled
 
         self.titleLabel.numberOfLines = 0;
         self.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.titleLabel];
-
+     
         // Set up content label (if set)
         if ([subtitle length])
         {
@@ -453,9 +455,16 @@ canBeDismissedByUser:(BOOL)dismissingEnabled
 
     self.titleLabel.frame = CGRectMake(self.textSpaceLeft,
                                        padding,
-                                       screenWidth - padding - self.textSpaceLeft - self.textSpaceRight,
+                                       screenWidth,
                                        0.0);
+    
+
     [self.titleLabel sizeToFit];
+
+    [self.titleLabel setTextAlignment:UITextAlignmentCenter];
+    
+    CGRect bounds = self.bounds;
+    self.titleLabel.center = CGPointMake(bounds.size.width/2, self.titleLabel.center.y);
 
     if ([self.subtitle length])
     {
